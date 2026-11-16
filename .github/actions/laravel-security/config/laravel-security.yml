@@ -1,0 +1,52 @@
+rules:
+  - id: php-no-eval
+    message: 'Avoid eval(): executing dynamically built PHP code is dangerous.'
+    languages: [php]
+    severity: ERROR
+    pattern: eval(...)
+    metadata:
+      category: security
+      confidence: HIGH
+      cwe: 'CWE-95'
+
+  - id: php-no-disabled-tls-verify
+    message: 'TLS peer verification must not be disabled.'
+    languages: [php]
+    severity: ERROR
+    pattern-either:
+      - pattern: curl_setopt($CURL, CURLOPT_SSL_VERIFYPEER, false)
+      - pattern: curl_setopt($CURL, CURLOPT_SSL_VERIFYHOST, 0)
+    metadata:
+      category: security
+      confidence: HIGH
+      cwe: 'CWE-295'
+
+  - id: laravel-no-unprepared-sql
+    message: 'Prefer parameter binding over DB::unprepared() for SQL queries.'
+    languages: [php]
+    severity: ERROR
+    pattern: DB::unprepared(...)
+    metadata:
+      category: security
+      confidence: MEDIUM
+      cwe: 'CWE-89'
+
+  - id: php-review-unserialize
+    message: 'Review unserialize(): untrusted data can lead to object injection.'
+    languages: [php]
+    severity: WARNING
+    pattern: unserialize(...)
+    metadata:
+      category: security
+      confidence: MEDIUM
+      cwe: 'CWE-502'
+
+  - id: php-review-shell-exec
+    message: 'Review shell_exec() and ensure all external input is controlled.'
+    languages: [php]
+    severity: WARNING
+    pattern: shell_exec(...)
+    metadata:
+      category: security
+      confidence: MEDIUM
+      cwe: 'CWE-78'

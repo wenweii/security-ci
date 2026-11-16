@@ -1,0 +1,19 @@
+# Gitleaks default rules remain enabled. Restrict exclusions to generated files.
+[extend]
+useDefault = true
+
+# A deterministic, non-production marker for the acceptance test.
+# Never use this prefix for a real credential.
+[[rules]]
+id = 'security-ci-fake-test-token'
+description = 'A synthetic token used only to verify the secret scanning gate'
+regex = "SECURITY_CI_TEST_TOKEN_[A-Z0-9]{24}"
+keywords = ['SECURITY_CI_TEST_TOKEN_']
+
+# Review every exclusion with the security owner.
+[[allowlists]]
+description = 'Dependencies and generated build artifacts only'
+paths = [
+  "(^|/)(vendor|node_modules|coverage|public/build)/",
+  "(^|/)storage/framework/(cache|views|sessions)/"
+]
