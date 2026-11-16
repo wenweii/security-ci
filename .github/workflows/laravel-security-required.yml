@@ -1,0 +1,24 @@
+name: Central Laravel Security CI
+
+# Called by a small workflow in each public demo repository.
+# GitHub Free: no Organization Required Workflow Ruleset needed.
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  security-gate:
+    name: security-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out the caller repository
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Run the centrally maintained security checks
+        # REQUIRED: replace wenweii with your GitHub Owner name.
+        uses: wenweii/security-ci/.github/actions/laravel-security@main
