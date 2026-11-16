@@ -14,7 +14,7 @@
 
 此處 PASS 指各案例符合其預期；TC-02～TC-04 的預期是掃描真正偵測風險並使 Gate 失敗。TC-07 另以 Required Check、Branch API、PR 合併狀態與 GitHub 介面確認阻擋，並非從紅色 Run 推論。
 
-證據原始資料、Check Run ID、PR API 結果及帶時間戳記的日誌摘錄保存於 [EVIDENCE.json](docs/security-ci-acceptance/EVIDENCE.json)。截圖檔未成功保存，因此沒有填寫不存在的圖片路徑；TC-07 使用下列 API 與實際介面觀察作為證據。完整 Branch Protection 管理 API 的權限限制另列於文末。
+證據原始資料、Check Run ID、PR API 結果及帶時間戳記的日誌摘錄保存於 [EVIDENCE.json](docs/security-ci-acceptance/EVIDENCE.json)。已補齊 TC-07 合併阻擋及已保存 Branch Protection 設定的 4 張原始實際截圖，見下方截圖證據補件。原有 API 與日誌證據完整保留。完整 Branch Protection 管理 API 的權限限制另列於文末。
 
 ## 七項驗收
 
@@ -26,7 +26,7 @@
 | TC-04 | Composer Audit 阻擋漏洞鎖定套件 | PASS（Gate 預期 failure） | [#5](https://github.com/wenweii/laravel-security-demo/pull/5) | [Run](https://github.com/wenweii/laravel-security-demo/actions/runs/43843253802) | symfony/http-foundation v5.4.0 找到 4 筆 Advisory，包含 CVE-2024-50345／PKSA-b35n-565h-rs4q；Audit outcome failure，Final Gate failure | 未保存；使用 API／日誌 | 2026-11-16 |
 | TC-05 | 全新乾淨歷史 PR 恢復成功 | PASS | [#6](https://github.com/wenweii/laravel-security-demo/pull/6) | [Run](https://github.com/wenweii/laravel-security-demo/actions/runs/43843388898) | 四項掃描與 Final Gate success；比較 API 顯示從乾淨 main 領先 1 commit、僅新增 tc05-clean.txt；PR history 掃描 1 commit | 未保存；使用 API／日誌 | 2026-11-16 |
 | TC-06 | 短版 Caller 跨 Repository 呼叫中央 CI | PASS | [#1](https://github.com/wenweii/laravel-security-demo/pull/1)、[#6](https://github.com/wenweii/laravel-security-demo/pull/6) | [TC-01](https://github.com/wenweii/laravel-security-demo/actions/runs/43842537226)、[TC-05](https://github.com/wenweii/laravel-security-demo/actions/runs/43843388898) | `referenced_workflows` 與 job log 都確認使用 wenweii/security-ci 的中央 Workflow；Composite Action、規則與腳本在中央執行 | 未保存；使用 API／日誌 | 2026-11-16 |
-| TC-07 | 失敗 Required Check 確實阻擋合併 | PASS | [#3](https://github.com/wenweii/laravel-security-demo/pull/3) | [失敗 Required Check](https://github.com/wenweii/laravel-security-demo/actions/runs/43843094351/job/133216392510) | Required Check failure、main protected、PR API `mergeable_state=blocked`；GitHub 顯示 Required 且 Merge pull request 停用；未執行合併或 Bypass | 畫面已觀察；截圖檔未取得 | 2026-11-16 |
+| TC-07 | 失敗 Required Check 確實阻擋合併 | PASS | [#3](https://github.com/wenweii/laravel-security-demo/pull/3) | [失敗 Required Check](https://github.com/wenweii/laravel-security-demo/actions/runs/43843094351/job/133216392510) | Required Check failure、main protected、PR API `mergeable_state=blocked`；GitHub 顯示 Required 且 Merge pull request 停用；未執行合併或 Bypass | [合併阻擋實際截圖](docs/security-ci-acceptance/screenshots/tc07-merge-blocked.jpg) | 2026-11-16 |
 
 所有驗收 PR 均未合併，分支保留。TC-02 維持開啟，供 Owner 重現 TC-07。`mergeable=true` 僅代表沒有內容衝突，不能解讀為符合安全合併條件；同筆 PR API 的 `mergeable_state=blocked` 才是保護規則下的合併狀態。乾淨 TC-05 同時回傳 `mergeable_state=clean`，可供對照。
 
@@ -62,6 +62,33 @@ Workflow Name：`Laravel Security CI`；中央 Workflow Name：`Central Laravel 
 | 額外 Reviewer approval | 未要求；保留 Require PR，無需以自我審查卡住單人練習 |
 
 此為新建 Repository 的新規則，沒有刪除或降低既有保護。GitHub 頁面先回報 `Branch protection rule created.`，再重新開啟規則確認設定；Branch API 實際回傳 `protected=true`、`protection.enabled=true`、正確的 context 與 App ID。TC-07 的失敗 PR 當下仍開啟，且合併按鈕停用。
+
+## 截圖證據補件（2026-11-16）
+
+以下皆為直接從 GitHub 實際畫面擷取、未經合成或重畫的原始 JPEG。設定畫面是重新開啟已保存的既有規則，不是未儲存的新建表單；本次沒有修改或再次儲存保護設定。擷取期間只調整檢視比例與捲動位置，完成後恢復原比例。
+
+| 截圖 | 可查證內容 | 來源頁面 |
+|---|---|---|
+| [TC-07 合併阻擋](docs/security-ci-acceptance/screenshots/tc07-merge-blocked.jpg) | PR #3 仍開啟，base main，Security Gate failure 且標示 Required，Merge pull request 按鈕停用 | [PR #3](https://github.com/wenweii/laravel-security-demo/pull/3) |
+| [main 與 Require PR](docs/security-ci-acceptance/screenshots/branch-protection-main-pr.jpg) | Branch name pattern main，套用 main，Require a pull request before merging 已勾選 | [已保存規則](https://github.com/wenweii/laravel-security-demo/settings/branch_protection_rules/86398652) |
+| [Required Check 與嚴格更新](docs/security-ci-acceptance/screenshots/branch-protection-required-check.jpg) | Require status checks、Require branches to be up to date 已勾選；實際 context security-gate / security-gate，來源 GitHub Actions | [已保存規則](https://github.com/wenweii/laravel-security-demo/settings/branch_protection_rules/86398652) |
+| [管理者與破壞性操作限制](docs/security-ci-acceptance/screenshots/branch-protection-admin-restrictions.jpg) | Do not allow bypassing 已勾選，適用管理者；Allow force pushes、Allow deletions 均未勾選 | [已保存規則](https://github.com/wenweii/laravel-security-demo/settings/branch_protection_rules/86398652) |
+
+### TC-07：失敗 Required Check 與停用合併按鈕
+
+![TC-07：PR #3 的 Required Security Gate 失敗，Merge pull request 停用](docs/security-ci-acceptance/screenshots/tc07-merge-blocked.jpg)
+
+### Branch Protection：main 與 Require PR
+
+![已保存規則：main 與 Require a pull request before merging](docs/security-ci-acceptance/screenshots/branch-protection-main-pr.jpg)
+
+### Branch Protection：Required Check 與更新要求
+
+![已保存規則：Require status checks、Strict 更新要求及 Security Gate context](docs/security-ci-acceptance/screenshots/branch-protection-required-check.jpg)
+
+### Branch Protection：管理者不得繞過、禁止 Force Push 與刪除
+
+![已保存規則：管理者不得繞過，Allow force pushes 與 Allow deletions 未啟用](docs/security-ci-acceptance/screenshots/branch-protection-admin-restrictions.jpg)
 
 ## 掃描與 Gate 政策驗證
 
@@ -102,7 +129,7 @@ Gitleaks／Semgrep 規則、排除範圍、安裝腳本、checksum、Final Gate 
 ## 限制與後續風險
 
 1. GitHub 外掛已連接，可讀取檔案、Actions、Check Runs 與 PR；但 create tree、create file、collaborator permission 及完整 Branch Protection 管理 API 回傳 403 Resource not accessible by integration。本次必要寫入由已登入相同 Owner 的 GitHub 網頁完成。完整保護 API 未成功讀取，不把它寫成成功；以已儲存設定頁、一般 Branch API 與實際 TC-07 交叉驗證。
-2. GitHub 實際畫面已觀察並在對話中顯示；保存成截圖檔的嘗試未成功。畫面截圖檔未取得，沒有圖片網址。EVIDENCE.json 保存對應 PR、Run、Check、Branch 與合併狀態 API 資料及實際介面觀察。
+2. 初版紀錄未取得截圖檔；2026-11-16 已完成截圖補件。4 張實際畫面原始 JPEG 已保存於 docs/security-ci-acceptance/screenshots，並在 EVIDENCE.json 紀錄擷取時間、來源 URL 與 SHA-256。圖片未重畫、未合成、未裁切或修改設定值；本次只補證據與文件，未重跑或改動原已完成的部署、測試及保護規則。
 3. 保留原始 @main 引用與第三方 Actions 的既定 refs；中央 main 後續變動會影響下一次掃描。這是手冊練習設計，沒有擅自改為版本鎖定。正式導入另行評估 SHA／Tag 與變更審核。
 4. 此專案為 PHP／Composer 驗收 Fixture，並非完整 Laravel 網站。通過只代表這七項驗收與目前規則的 Gate 行為成立，不代表完整應用程式不存在其他漏洞。
 5. GitHub Actions 日誌受遠端保留政策影響；本次將必要摘錄及識別碼保存於 Git 版本化的 EVIDENCE.json，本機另保留完整解碼日誌。
