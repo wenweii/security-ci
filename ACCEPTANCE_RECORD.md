@@ -8,6 +8,18 @@
 - 來源：已完整讀取提供的 14 頁 PDF 手冊與 18 個有效素材檔。Owner 已明確授權使用解壓後的 `security-ci` 內容，略過原始 ZIP 封裝核對。
 - 本文件取代初始空白驗收範本；初次 Phase 0 受阻紀錄保留在本機 `PHASE0_BLOCKED_RECORD.md`，不代表目前狀態。
 
+## 下載完整驗收報告 PDF
+
+[下載最新版完整驗收報告 PDF（九頁，含四張實際截圖與可點擊證據連結）](https://github.com/wenweii/security-ci/raw/refs/heads/main/docs/security-ci-acceptance/Laravel_Security_CI_Acceptance_Report_2026-11-16.pdf)
+
+亦可使用 [GitHub 線上預覽](docs/security-ci-acceptance/Laravel_Security_CI_Acceptance_Report_2026-11-16.pdf)。
+
+- 檔案：`docs/security-ci-acceptance/Laravel_Security_CI_Acceptance_Report_2026-11-16.pdf`
+- 大小：1,926,840 bytes（約 1.93 MB）。
+- SHA-256：`b9fc84030136645e526897d4d2b688116d72da2d78cca55928d92aea55ae5b97`。
+- PDF 版本依據：截圖補件合併版本 `8d3eb9e3296a14d49465380720db556bf93da512`；已檢查九頁版面、四張原始截圖及 61 個可點擊連結。
+- 本次上傳沿用已交付的原始 PDF，未重新產製或修改內容；僅新增 PDF 檔與本段下載入口，既有驗收結果及部署設定維持原狀。
+
 ## 最終結論
 
 **PASS：七項測試全部通過，且證據完整。**
@@ -135,3 +147,4 @@ Gitleaks／Semgrep 規則、排除範圍、安裝腳本、checksum、Final Gate 
 5. GitHub Actions 日誌受遠端保留政策影響；本次將必要摘錄及識別碼保存於 Git 版本化的 EVIDENCE.json，本機另保留完整解碼日誌。
 
 Decision / reviewer / date: **PASS** / Codex（執行者，尚未經 Owner 人工審閱） / 2026-11-16
+
