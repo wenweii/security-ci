@@ -23,7 +23,7 @@ runs:
     - name: Install checksummed Gitleaks
       shell: bash
       env:
-        SECURITY_ACTION_ROOT: 4{{ github.action_path }}
+        SECURITY_ACTION_ROOT: ${{ github.action_path }}
       run: bash "$SECURITY_ACTION_ROOT/scripts/install-gitleaks.sh"
 
     - name: Composer Audit (blocking)
@@ -41,9 +41,9 @@ runs:
       shell: bash
       continue-on-error: true
       env:
-        SECURITY_ACTION_ROOT: 4{{ github.action_path }}
-        GITLEAKS_CONFIG: 4{{ github.action_path }}/config/gitleaks.toml
-        PR_BASE_REF: 4{{ github.base_ref }}
+        SECURITY_ACTION_ROOT: ${{ github.action_path }}
+        GITLEAKS_CONFIG: ${{ github.action_path }}/config/gitleaks.toml
+        PR_BASE_REF: ${{ github.base_ref }}
       run: bash "$SECURITY_ACTION_ROOT/scripts/scan-gitleaks.sh"
 
     - name: Semgrep ERROR (blocking)
@@ -51,39 +51,47 @@ runs:
       shell: bash
       continue-on-error: true
       env:
-        SECURITY_ACTION_ROOT: 4{{ github.action_path }}
+        SECURITY_ACTION_ROOT: ${{ github.action_path }}
       run: |
         set -euo pipefail
-        semgrep scan --config "$SECURITY_ACTION_ROOT/config/laravel-security.yml"           --severity ERROR --error --strict --metrics=off           --exclude vendor --exclude node_modules --exclude coverage           --exclude public/build --exclude storage/framework           --exclude storage/logs --exclude bootstrap/cache .
+        semgrep scan --config "$SECURITY_ACTION_ROOT/config/laravel-security.yml" \
+          --severity ERROR --error --strict --metrics=off \
+          --exclude vendor --exclude node_modules --exclude coverage \
+          --exclude public/build --exclude storage/framework \
+          --exclude storage/logs --exclude bootstrap/cache .
 
     - name: Semgrep WARNING (advisory findings)
       id: semgrep_warning
       shell: bash
       continue-on-error: true
       env:
-        SECURITY_ACTION_ROOT: 4{{ github.action_path }}
+        SECURITY_ACTION_ROOT: ${{ github.action_path }}
       run: |
         set -euo pipefail
-        semgrep scan --config "$SECURITY_ACTION_ROOT/config/laravel-security.yml"           --severity WARNING --strict --metrics=off           --exclude vendor --exclude node_modules --exclude coverage           --exclude public/build --exclude storage/framework           --exclude storage/logs --exclude bootstrap/cache .
+        semgrep scan --config "$SECURITY_ACTION_ROOT/config/laravel-security.yml" \
+          --severity WARNING --strict --metrics=off \
+          --exclude vendor --exclude node_modules --exclude coverage \
+          --exclude public/build --exclude storage/framework \
+          --exclude storage/logs --exclude bootstrap/cache .
 
     - name: Final Security Gate
       if: always()
       shell: bash
       env:
-        COMPOSER_RESULT: 4{{ steps.composer_audit.outcome }}
-        GITLEAKS_RESULT: 4{{ steps.gitleaks.outcome }}
-        SEMGREP_ERROR_RESULT: 4{{ steps.semgrep_error.outcome }}
-        SEMGREP_WARNING_RESULT: 4{{ steps.semgrep_warning.outcome }}
+        COMPOSER_RESULT: ${{ steps.composer_audit.outcome }}
+        GITLEAKS_RESULT: ${{ steps.gitleaks.outcome }}
+        SEMGREP_ERROR_RESULT: ${{ steps.semgrep_error.outcome }}
+        SEMGREP_WARNING_RESULT: ${{ steps.semgrep_warning.outcome }}
       run: |
         set -euo pipefail
         {
           echo '## Central Laravel Security CI'
           echo '| Scanner | Result | Policy |'
           echo '| --- | --- | --- |'
-          echo "| Composer Audit | 4{COMPOSER_RESULT:-missing} | Blocking |"
-          echo "| Gitleaks | 4{GITLEAKS_RESULT:-missing} | Blocking |"
-          echo "| Semgrep ERROR | 4{SEMGREP_ERROR_RESULT:-missing} | Blocking |"
-          echo "| Semgrep WARNING | 4{SEMGREP_WARNING_RESULT:-missing} | Findings advisory; runtime errors must be reviewed |"
+          echo "| Composer Audit | ${COMPOSER_RESULT:-missing} | Blocking |"
+          echo "| Gitleaks | ${GITLEAKS_RESULT:-missing} | Blocking |"
+          echo "| Semgrep ERROR | ${SEMGREP_ERROR_RESULT:-missing} | Blocking |"
+          echo "| Semgrep WARNING | ${SEMGREP_WARNING_RESULT:-missing} | Findings advisory; runtime errors must be reviewed |"
         } >> "$GITHUB_STEP_SUMMARY"
         if [[ "$COMPOSER_RESULT" != success || "$GITLEAKS_RESULT" != success || "$SEMGREP_ERROR_RESULT" != success || "$SEMGREP_WARNING_RESULT" != success ]]; then
           echo '::error::Security gate did not pass. Review scan outputs.'
