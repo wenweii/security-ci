@@ -93,7 +93,7 @@
     "bypass_attempted": false,
     "merge_attempted": false
   },
-  "screenshot_status": "Actual GitHub UI was observed and an inline screenshot was displayed in the chat; attempts to save a screenshot file did not succeed. No screenshot file URL is claimed.",
+  "screenshot_status": "COMPLETE: Four original unmodified GitHub screenshots saved as JPEG and committed with the acceptance record supplement.",
   "tc05_compare": {
     "repository_full_name": "wenweii/laravel-security-demo",
     "base": "main",
@@ -701,5 +701,53 @@
       "2026-11-16T10:02:44.1927314Z ##[end-action id=__d2e78ec9-69be-43bc-b511-5040cc299313.__actions_setup-python;outcome=success;conclusion=success;duration_ms=143]"
     ]
   },
-  "log_excerpts_note": "Selected unchanged lines from full decoded GitHub job logs; timestamps preserved. Full logs remain at linked GitHub job/run URLs and in local FULL_EVIDENCE.local.json."
+  "log_excerpts_note": "Selected unchanged lines from full decoded GitHub job logs; timestamps preserved. Full logs remain at linked GitHub job/run URLs and in local FULL_EVIDENCE.local.json.",
+  "screenshot_status_history": [
+    {
+      "status": "Initial report: screenshot files not saved",
+      "resolved_on": "2026-11-16"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/security-ci-acceptance/screenshots/branch-protection-admin-restrictions.jpg",
+      "github_url": "https://github.com/wenweii/security-ci/blob/main/docs/security-ci-acceptance/screenshots/branch-protection-admin-restrictions.jpg",
+      "format": "JPEG",
+      "bytes": 305009,
+      "sha256": "674e5f9b166c1f3c83c02f825b5d30f4f994f4e769a4ad8da11391544d4dabe8",
+      "captured_at": "2026-11-16T18:30:07.018569+08:00",
+      "source_url": "https://github.com/wenweii/laravel-security-demo/settings/branch_protection_rules/86398652",
+      "capture_method": "CUA native Safari window screenshot; original bytes, no image edits"
+    },
+    {
+      "path": "docs/security-ci-acceptance/screenshots/branch-protection-main-pr.jpg",
+      "github_url": "https://github.com/wenweii/security-ci/blob/main/docs/security-ci-acceptance/screenshots/branch-protection-main-pr.jpg",
+      "format": "JPEG",
+      "bytes": 393724,
+      "sha256": "7498d4909484727f8b7b12e33d80bad1e4ce3ca6462e0ac18a9f7435442aeb40",
+      "captured_at": "2026-11-16T18:23:24.045993+08:00",
+      "source_url": "https://github.com/wenweii/laravel-security-demo/settings/branch_protection_rules/86398652",
+      "capture_method": "CUA native Safari window screenshot; original bytes, no image edits"
+    },
+    {
+      "path": "docs/security-ci-acceptance/screenshots/branch-protection-required-check.jpg",
+      "github_url": "https://github.com/wenweii/security-ci/blob/main/docs/security-ci-acceptance/screenshots/branch-protection-required-check.jpg",
+      "format": "JPEG",
+      "bytes": 376237,
+      "sha256": "d0478d9221968a8bee884d4c171c7dc30a2ab3b0d5e1b26ca28517546a7bce61",
+      "captured_at": "2026-11-16T18:30:06.218422+08:00",
+      "source_url": "https://github.com/wenweii/laravel-security-demo/settings/branch_protection_rules/86398652",
+      "capture_method": "CUA native Safari window screenshot; original bytes, no image edits"
+    },
+    {
+      "path": "docs/security-ci-acceptance/screenshots/tc07-merge-blocked.jpg",
+      "github_url": "https://github.com/wenweii/security-ci/blob/main/docs/security-ci-acceptance/screenshots/tc07-merge-blocked.jpg",
+      "format": "JPEG",
+      "bytes": 309243,
+      "sha256": "e0a33f5ff7671ab1d78ae09f55692d4be142fd0c59cbd5290cb369150323b9f8",
+      "captured_at": "2026-11-16T18:22:41.514286+08:00",
+      "source_url": "https://github.com/wenweii/laravel-security-demo/pull/3",
+      "capture_method": "CUA native Safari window screenshot; original bytes, no image edits"
+    }
+  ]
 }
